@@ -59,7 +59,7 @@ class CategoryServiceTest {
         //when
         CategoryDTO categoryDTO = categoryService.getCategoryByName(NAME);
 
-        //tehen
+        //then
         assertEquals(ID, categoryDTO.getId());
         assertEquals(NAME, categoryDTO.getName());
     }

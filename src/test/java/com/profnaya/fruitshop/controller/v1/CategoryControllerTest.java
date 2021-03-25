@@ -1,7 +1,6 @@
-package com.profnaya.fruitshop.controller;
+package com.profnaya.fruitshop.controller.v1;
 
 import com.profnaya.fruitshop.api.v1.model.CategoryDTO;
-import com.profnaya.fruitshop.controller.v1.CategoryController;
 import com.profnaya.fruitshop.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,7 +70,7 @@ class CategoryControllerTest {
         when(categoryService.getCategoryByName(anyString())).thenReturn(category);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories/Nuts")
-        .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(NAME)));
     }
