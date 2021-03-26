@@ -52,7 +52,7 @@ class CustomerControllerTest {
         List<CustomerDTO> customers = Arrays.asList(customer1, customer2);
         when(customerService.getAllCustomers()).thenReturn(customers);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/customers/")
+        mockMvc.perform(MockMvcRequestBuilders.get(CustomerController.BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customers", hasSize(2)));
@@ -67,7 +67,7 @@ class CustomerControllerTest {
         customer.setLastname(LASTNAME);
         when(customerService.getCustomerById(anyLong())).thenReturn(customer);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/customers/1")
+        mockMvc.perform(MockMvcRequestBuilders.get(CustomerController.BASE_URL+"/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname", equalTo(FIRSTNAME)))
@@ -86,17 +86,17 @@ class CustomerControllerTest {
         CustomerDTO returnDTO = new CustomerDTO();
         returnDTO.setFirstname(customer.getFirstname());
         returnDTO.setLastname(customer.getLastname());
-        returnDTO.setCustomUrl("/api/v1/customers/1");
+        returnDTO.setCustomUrl(CustomerController.BASE_URL + "/1");
 
         when(customerService.createNewCustomer(customer)).thenReturn(returnDTO);
 
         //when/then
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/customers/")
+        mockMvc.perform(MockMvcRequestBuilders.post(CustomerController.BASE_URL)
         .contentType(MediaType.APPLICATION_JSON)
         .content(asJsonString(customer)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstname", equalTo(FIRSTNAME)))
-                .andExpect(jsonPath("$.customer_url", equalTo("/api/v1/customers/1")));
+                .andExpect(jsonPath("$.customer_url", equalTo(CustomerController.BASE_URL + "/1")));
     }
 
     @Test
@@ -114,19 +114,19 @@ class CustomerControllerTest {
         when(customerService.saveCustomerByDTO(1L, customer)).thenReturn(returnDTO);
 
         //when/then
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/customers/1")
+        mockMvc.perform(MockMvcRequestBuilders.put(CustomerController.BASE_URL + "/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(customer)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname", equalTo(FIRSTNAME)))
                 .andExpect(jsonPath("$.lastname", equalTo(LASTNAME)))
-                .andExpect(jsonPath("$.customer_url", equalTo("/api/v1/customers/1")));
+                .andExpect(jsonPath("$.customer_url", equalTo(CustomerController.BASE_URL + "/1")));
     }
 
     @Test
     void testDeleteCustomerById() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/customers/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete(CustomerController.BASE_URL + "/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 

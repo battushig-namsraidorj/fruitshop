@@ -2,6 +2,7 @@ package com.profnaya.fruitshop.service;
 
 import com.profnaya.fruitshop.api.v1.mapper.CustomerMapper;
 import com.profnaya.fruitshop.api.v1.model.CustomerDTO;
+import com.profnaya.fruitshop.controller.v1.CustomerController;
 import com.profnaya.fruitshop.domain.Customer;
 import com.profnaya.fruitshop.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -102,7 +103,7 @@ class CustomerServiceTest {
         //then
         assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
         assertEquals(customerDTO.getLastname(), savedDto.getLastname());
-        assertEquals("/api/v1/customers/1", savedDto.getCustomUrl());
+        assertEquals(CustomerController.BASE_URL + "/1", savedDto.getCustomUrl());
 
     }
 
