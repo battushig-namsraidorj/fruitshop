@@ -2,6 +2,7 @@ package com.profnaya.fruitshop.controller.v1;
 
 import com.profnaya.fruitshop.api.v1.model.CustomerDTO;
 import com.profnaya.fruitshop.service.CustomerService;
+import com.profnaya.fruitshop.service.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -37,7 +38,9 @@ class CustomerControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+                .setControllerAdvice(new RestResponseEntityExceptionHandler())
+                .build();
     }
 
     @Test
@@ -132,4 +135,15 @@ class CustomerControllerTest {
 
         verify(customerService, times(1)).deleteCustomerById(anyLong());
     }
+
+    @Test
+    public void testNotFoundException() throws Exception {
+
+        when(customerService.getCustomerById(anyLong())).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.get(CustomerController.BASE_URL + "/222")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
 }

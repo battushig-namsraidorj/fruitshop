@@ -2,6 +2,7 @@ package com.profnaya.fruitshop.service;
 
 import com.profnaya.fruitshop.api.v1.mapper.CategoryMapper;
 import com.profnaya.fruitshop.api.v1.model.CategoryDTO;
+import com.profnaya.fruitshop.domain.Category;
 import com.profnaya.fruitshop.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO getCategoryByName(String name) {
-        return categoryMapper.categoryToCategoryDTO(categoryRepository.findByName(name));
+        Category category = categoryRepository.findByName(name);
+
+        if (category == null)
+            throw new ResourceNotFoundException();
+
+        return categoryMapper.categoryToCategoryDTO(category);
+
     }
 }
