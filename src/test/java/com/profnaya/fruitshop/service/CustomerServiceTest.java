@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class CustomerServiceTest {
 
@@ -103,6 +103,14 @@ class CustomerServiceTest {
         assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
         assertEquals(customerDTO.getLastname(), savedDto.getLastname());
         assertEquals("/api/v1/customers/1", savedDto.getCustomUrl());
+
+    }
+
+    @Test
+    void deleteCustomerById() throws Exception {
+        final long id = 1L;
+        customerService.deleteCustomerById(id);
+        verify(customerRepository,times(1)).deleteById(anyLong());
 
     }
 }

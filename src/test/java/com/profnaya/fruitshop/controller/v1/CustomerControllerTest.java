@@ -122,4 +122,14 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.lastname", equalTo(LASTNAME)))
                 .andExpect(jsonPath("$.customer_url", equalTo("/api/v1/customers/1")));
     }
+
+    @Test
+    void testDeleteCustomerById() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/customers/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(customerService, times(1)).deleteCustomerById(anyLong());
+    }
 }
