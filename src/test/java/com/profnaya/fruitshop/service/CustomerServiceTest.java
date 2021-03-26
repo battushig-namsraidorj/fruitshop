@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -57,5 +58,28 @@ class CustomerServiceTest {
 
         assertEquals(FIRST_NAME, customerDTO.getFirstname());
         assertEquals(LAST_NAME, customerDTO.getLastname());
+    }
+
+    @Test
+    void testCreateNewCustomer() throws Exception {
+        //given
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstname(FIRST_NAME);
+        customerDTO.setLastname(LAST_NAME);
+
+        Customer savedCustomer = new Customer();
+        savedCustomer.setFirstname(customerDTO.getFirstname());
+        savedCustomer.setLastname(customerDTO.getLastname());
+        savedCustomer.setId(1L);
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+
+        //when
+        CustomerDTO savedDto = customerService.createNewCustomer(customerDTO);
+
+        //then
+        assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
+        assertEquals(customerDTO.getLastname(), savedDto.getLastname());
+        assertEquals("/api/v1/customers/1", savedDto.getCustomUrl());
+
     }
 }

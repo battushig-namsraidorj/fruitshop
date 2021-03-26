@@ -2,6 +2,7 @@ package com.profnaya.fruitshop.service;
 
 import com.profnaya.fruitshop.api.v1.mapper.CustomerMapper;
 import com.profnaya.fruitshop.api.v1.model.CustomerDTO;
+import com.profnaya.fruitshop.domain.Customer;
 import com.profnaya.fruitshop.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +39,14 @@ public class CustomerServiceImpl implements CustomerService {
                 .map(customerMapper::customerToCustomerDTO)
                 .orElseThrow(RuntimeException::new); //todo implement better exception handling
         //return customerMapper.customerToCustomerDTO(customerRepository.findById(id).get());
+    }
+
+    @Override
+    public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
+        Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
+        Customer savedCustomer = customerRepository.save(customer);
+        CustomerDTO returnDto = customerMapper.customerToCustomerDTO(savedCustomer);
+        returnDto.setCustomUrl("/api/v1/customers/" + savedCustomer.getId());
+        return returnDto;
     }
 }
